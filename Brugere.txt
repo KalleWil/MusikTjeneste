@@ -1,0 +1,4 @@
+Julian 1
+Kalle 1
+Lasse 1
+Troels 0

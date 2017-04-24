@@ -1,0 +1,7 @@
+// Dette dokument indeholder alle brugere af vores musikafspillertjeneste
+// 1 angiver premiumabonnement
+// 0 angiver ikke-premiumabonnement
+Julian 1
+Kalle 1
+Lasse 1
+Troels 0
