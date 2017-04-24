@@ -23,6 +23,8 @@ import javazoom.jl.player.advanced.AdvancedPlayer;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -30,7 +32,7 @@ import java.util.Date;
  */
 public final class MusikAfspiller { 
     
-    
+    GUI afspillerPanel;
     
     FileInputStream FIS;
     BufferedInputStream BIS;
@@ -49,6 +51,8 @@ public final class MusikAfspiller {
     public boolean paused;
     public boolean stopped;
     public boolean montørTilstand = false;
+    
+    public boolean alwaysUpdate = true;
 
     Date dato = new Date();
     java.util.Scanner tastatur = new java.util.Scanner(System.in);  // Opreter Scanner class med navn "tastatur"
@@ -64,10 +68,29 @@ public final class MusikAfspiller {
     }
     
     
+public void update()
+    {
+        System.out.println("update blev kaldt");
+    new Thread(){
+    public void run(){
+     while (true){
+         try {
+             
+             afspillerPanel.update();
+             Thread.sleep(1000);
+         } catch (InterruptedException ex) {
+         }
+        }
+    }
+    }.start();
+
+        
+    }
+    
 public void afspil()
 {
     try{
-        File file = new File("C:\\Users\\Julian Køster\\Documents\\NetBeansProjects\\MusikTjeneste\\build\\classes\\musiktjeneste\\bip.mp3");
+        File file = new File("C:\\Users\\Kalle Wilsen\\Documents\\Skoleopgaver\\Java - Objektorienteret programmering\\Projekter\\MusikTjeneste\\src\\musiktjeneste\\bip.mp3");
         FIS = new FileInputStream(file);
         BIS = new BufferedInputStream(FIS);
         player = new AdvancedPlayer(BIS);
@@ -109,7 +132,6 @@ public void pause(){
    if(player != null){
        try {
            pauseLocation = FIS.available();
-           songLengthCurrent = FIS.available();
            player.close();
            player = null;
            paused = true;
