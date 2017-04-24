@@ -177,7 +177,7 @@ public void resume()
             }
             */
             {
-                while (linje != null && linje.startsWith("\\//") == false) // læs fra filen indtil den er tom, og så længe linjen IKKE starter med //
+                while (linje != null )//&& linje.startsWith("\\//") == false) // læs fra filen indtil den er tom, og så længe linjen IKKE starter med //
                 {
             
                    String navn;
@@ -280,5 +280,3 @@ public void resume()
         }
     }
 }
-
-
