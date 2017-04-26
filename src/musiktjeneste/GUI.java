@@ -7,6 +7,9 @@ package musiktjeneste;
 
 import java.awt.event.ActionEvent;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.TimeZone;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.SwingUtilities;
@@ -98,10 +101,9 @@ public class GUI extends javax.swing.JPanel {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel1)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jSlider1, javax.swing.GroupLayout.DEFAULT_SIZE, 233, Short.MAX_VALUE)))
+                                .addComponent(jSlider1, javax.swing.GroupLayout.DEFAULT_SIZE, 286, Short.MAX_VALUE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(14, 14, 14))
+                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel2)
                         .addGap(0, 0, Short.MAX_VALUE)))
@@ -186,8 +188,18 @@ public class GUI extends javax.swing.JPanel {
             int tid, fuldSangTid;
             tid = (int) (( ( afspiller.songLength - ( afspiller.FIS.available()) ) / 24000 ));
             fuldSangTid = (int)((afspiller.songLength)/(24000));
-            jLabel4.setText(String.valueOf(fuldSangTid));
-            jLabel1.setText(String.valueOf(tid));
+           
+            TimeZone tz = TimeZone.getTimeZone("UTC");
+            SimpleDateFormat df = new SimpleDateFormat("mm:ss");
+            df.setTimeZone(tz);
+            String millisString = df.format(new Date(tid*1000));
+            jLabel1.setText(millisString);
+            
+            SimpleDateFormat df2 = new SimpleDateFormat("mm:ss");
+            df.setTimeZone(tz);
+            String millisString2 = df.format(new Date(fuldSangTid*1000));
+            jLabel4.setText(millisString2);
+
             
             //jLabel4.setText(Long.toString( ( afspiller.songLength - ( afspiller.FIS.available()) ) / 24000 ));   // 24000 giver tiden i sek ud fra hvor hurtigt programmet læser bytes
             jSlider1.setMaximum((int) ((afspiller.songLength)));
