@@ -76,8 +76,9 @@ public void update()
      while (true){
          try {
              
+                     
              afspillerPanel.update();
-             Thread.sleep(1000);
+             Thread.sleep(100);
          } catch (InterruptedException ex) {
          }
         }
