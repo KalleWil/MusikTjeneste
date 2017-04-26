@@ -31,7 +31,8 @@ import java.util.logging.Logger;
  * @author Kalle Wilsen
  */
 public final class MusikAfspiller { 
-    
+    File file = new File("C:\\Users\\Kalle Wilsen\\Documents\\Skoleopgaver\\Java - Objektorienteret programmering\\Projekter\\MusikTjeneste\\src\\musiktjeneste\\bip.mp3");
+    public String filename = file.getName();
     GUI afspillerPanel;
     
     FileInputStream FIS;
@@ -91,7 +92,6 @@ public void update()
 public void afspil()
 {
     try{
-        File file = new File("C:\\Users\\Kalle Wilsen\\Documents\\Skoleopgaver\\Java - Objektorienteret programmering\\Projekter\\MusikTjeneste\\src\\musiktjeneste\\bip.mp3");
         FIS = new FileInputStream(file);
         BIS = new BufferedInputStream(FIS);
         player = new AdvancedPlayer(BIS);
