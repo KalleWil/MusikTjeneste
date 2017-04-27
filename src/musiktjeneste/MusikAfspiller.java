@@ -105,6 +105,12 @@ public final class MusikAfspiller {
     }
     
     
+
+public void initialize()
+{
+    System.out.println("Initialize complete");
+}
+    
 public void updateList()
 {
     filename = file.getName();

@@ -26,7 +26,7 @@ public class GUI extends javax.swing.JPanel {
     public GUI() throws IOException {
      
      initComponents();
-        
+     
     }
 
     @SuppressWarnings("unchecked")
@@ -233,9 +233,19 @@ public class GUI extends javax.swing.JPanel {
     public void run() {
         try {
             int tid, fuldSangTid;
+            
+            if(afspiller.songLength!=0)
+            {
             tid = ((int) (( ( afspiller.songLength - ( afspiller.FIS.available()) ) / 24000 )));
             fuldSangTid = (int)((afspiller.songLength)/(24000));
-           
+            jSlider1.setMaximum((int) ((afspiller.songLength)));
+            jSlider1.setValue((int) (( afspiller.songLength - ( afspiller.FIS.available()) )));
+            }
+            else
+            {
+                tid=0;
+                fuldSangTid=0;
+            }
             TimeZone tz = TimeZone.getTimeZone("UTC");
             SimpleDateFormat df = new SimpleDateFormat("mm:ss");
             df.setTimeZone(tz);
@@ -248,8 +258,7 @@ public class GUI extends javax.swing.JPanel {
             jLabel4.setText(millisString2);
             
             
-            jSlider1.setMaximum((int) ((afspiller.songLength)));
-            jSlider1.setValue((int) (( afspiller.songLength - ( afspiller.FIS.available()) )));
+            
 
             jLabel5.setText(afspiller.songName);
             jLabel6.setText(afspiller.artistName);
