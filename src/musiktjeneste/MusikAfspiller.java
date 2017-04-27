@@ -5,7 +5,7 @@
  */
 package musiktjeneste;
 
-/*import java.io.BufferedInputStream;
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -13,18 +13,31 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-*/ //import java.io.PrintWriter;
+
+//import java.io.PrintWriter;
 //import java.util.logging.Level;
 //import java.util.logging.Logger;
 
+//import com.sun.xml.internal.ws.api.addressing.WSEndpointReference;
+//import com.sun.xml.internal.ws.api.addressing.WSEndpointReference.Metadata;
 import javazoom.jl.decoder.JavaLayerException;
 import javazoom.jl.player.*;
 import javazoom.jl.player.advanced.AdvancedPlayer;
 import java.io.*;
+//import java.net.ContentHandler;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.apache.tika.exception.TikaException;
+//import jdk.internal.org.xml.sax.helpers.DefaultHandler;
+import org.xml.sax.ContentHandler;
+import org.xml.sax.helpers.DefaultHandler;
+import org.apache.tika.metadata.Metadata;
+import org.apache.tika.parser.ParseContext;
+import org.apache.tika.parser.Parser;
+import org.apache.tika.parser.mp3.Mp3Parser;
+import org.xml.sax.SAXException;
 
 /**
  *
@@ -49,8 +62,8 @@ public final class MusikAfspiller {
     
     public int antalAfBrugere;
     public int omsætning = 0;
-    public boolean paused;
-    public boolean stopped;
+    public boolean paused = false;
+    public boolean stopped = true;
     public boolean montørTilstand = false;
     
     public boolean alwaysUpdate = true;
@@ -62,12 +75,41 @@ public final class MusikAfspiller {
     private ArrayList<Brugere> BrugerListe = new ArrayList<Brugere>(); // arraylist med elementer af typen 'Brugere' 
     private ArrayList<String> HandlingerListe = new ArrayList<String>();    // Til at logge alle relevante handlinger
     
+    public String songName;
+    public String artistName;
+    public String albumName;
+    
     public MusikAfspiller() throws IOException, FileNotFoundException{
         indlæsBrugere();    // indlæser brugere fra "Brugere.txt"
         indlæsOmsætning();  // indlæser tidligere omsætning. Info til montør
         System.out.println("Startup complete =)");
+        
+        String path = ("C:\\Users\\Kalle Wilsen\\Documents\\Skoleopgaver\\Java - Objektorienteret programmering\\Projekter\\MusikTjeneste\\src\\musiktjeneste\\bip.mp3");
+      try{      
+        InputStream input = new FileInputStream(new File(path));
+        ContentHandler handler = new DefaultHandler();
+        Metadata metadata = new Metadata();
+        Parser parser = new Mp3Parser();
+        ParseContext parseCtx = new ParseContext();
+        parser.parse(input,handler, metadata,parseCtx);
+        
+        songName = metadata.get("title");
+        artistName = metadata.get("xmpDM:artist");
+        albumName = metadata.get("xmpDM:album");
+        
+      } catch (IOException | TikaException | SAXException e){
+          
+      }
+       
+       
     }
     
+    
+public void updateList()
+{
+    filename = file.getName();
+
+}
     
 public void update()
     {
@@ -75,9 +117,7 @@ public void update()
     new Thread(){
     public void run(){
      while (true){
-         try {
-             
-                     
+         try {       
              afspillerPanel.update();
              Thread.sleep(100);
          } catch (InterruptedException ex) {
@@ -90,6 +130,7 @@ public void update()
     }
     
 public void afspil()
+{ if(stopped==true)
 {
     try{
         FIS = new FileInputStream(file);
@@ -98,7 +139,7 @@ public void afspil()
 
         songLength = FIS.available(); // returnerer estimat af, hvor mange bytes sangen fylder  // har en værdi på 4379262 bytes
         songLengthCurrent = songLength;
-        fileLocation = file + "";
+        //fileLocation = file + "";
 
         
         new Thread(){
@@ -107,21 +148,24 @@ public void afspil()
                 catch (Exception e){}
             }
         }.start();
+        paused = false;
+        stopped = false;
         System.out.println("Afspil");
         omsætning += 5;         // fortjenste på 5 kr pr. afspillet sang
         gemOmsætning();
         }catch(IOException e){} catch (JavaLayerException ex) {
             System.out.println("Sangen findes ikke");
             }
+}
 } 
 
 public void stop(){
     if(player != null){
         player.close();
-        player = null;
+/*        player = null;
         pauseLocation = 0;
         songLength = 0;
-        songLengthCurrent = 0;
+        songLengthCurrent = 0; */
         paused = false;
         stopped = true;
         System.out.println("Stop");
@@ -130,42 +174,45 @@ public void stop(){
 
 
 public void pause(){
-   if(player != null){
+  if(player != null){
        try {
            pauseLocation = FIS.available();
            player.close();
-           player = null;
-           paused = true;
            stopped = false;
+           paused = true;
            System.out.println("Pause");
        } catch (IOException ex) {
        }
    }
 }
 
-public void resume()
+public void resume(long resumeTime)
 {
+    if(paused==true)
+    {
     try{
 
-        FIS = new FileInputStream(fileLocation);
+        FIS = new FileInputStream(file);
         BIS = new BufferedInputStream(FIS);
-        FIS.skip(songLength-pauseLocation);
+        FIS.skip(resumeTime);   //songLength-pauseLocation
         songLengthCurrent = FIS.available();
         player = new AdvancedPlayer(BIS);
 
 
 
         new Thread(){
-            @Override
             public void run(){
                 try{ player.play(); 
                 }
                 catch (JavaLayerException e){}
             }
         }   .start();
+        paused = false;
+        stopped = false;
         System.out.println("Resume");
         }   catch(IOException | JavaLayerException e){}
 } 
+}
 
 
 

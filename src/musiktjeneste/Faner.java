@@ -18,16 +18,18 @@ public class Faner extends javax.swing.JPanel {
      * @throws java.io.IOException
      */
     public Faner() throws IOException {
-        MusikAfspiller afspiller = new MusikAfspiller();
         initComponents();
 
         gUI1.ejer = this;
         startPanel1.ejer = this;
         montørPanel1.ejer = this;
   
+        MusikAfspiller afspiller = new MusikAfspiller();
         gUI1.afspiller = afspiller;
         montørPanel1.afspiller = afspiller;
         startPanel1.afspiller = afspiller;
+        afspiller.afspillerPanel = gUI1;
+        afspiller.update();
     }
 
     /**
@@ -52,6 +54,7 @@ public class Faner extends javax.swing.JPanel {
             e1.printStackTrace();
         }
 
+        jTabbedPane1.setPreferredSize(new java.awt.Dimension(503, 310));
         jTabbedPane1.addTab("Start", startPanel1);
         jTabbedPane1.addTab("Afspiller", gUI1);
         jTabbedPane1.addTab("Montør", montørPanel1);
@@ -60,11 +63,15 @@ public class Faner extends javax.swing.JPanel {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 643, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
