@@ -10,8 +10,9 @@ package musiktjeneste;
  * @author Julian
  */
 public class Brugere {
-    String navn;
-    boolean abonnent;
+    
+    private String navn;
+    private boolean abonnent;
     
     
     public String getNavn(){
@@ -20,6 +21,14 @@ public class Brugere {
     
     public boolean getAbonnentStatus(){
         return abonnent;
+    }
+
+    public void setNavn(String s) {
+        navn = s;
+    }
+
+    public void setAbonnentStatus(boolean a) {
+        abonnent = a;
     }
    
 }

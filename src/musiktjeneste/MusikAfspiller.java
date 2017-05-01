@@ -7,36 +7,37 @@ package musiktjeneste;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-
-//import java.io.PrintWriter;
-//import java.util.logging.Level;
-//import java.util.logging.Logger;
-
-//import com.sun.xml.internal.ws.api.addressing.WSEndpointReference;
-//import com.sun.xml.internal.ws.api.addressing.WSEndpointReference.Metadata;
 import javazoom.jl.decoder.JavaLayerException;
 import javazoom.jl.player.*;
 import javazoom.jl.player.advanced.AdvancedPlayer;
 import java.io.*;
-//import java.net.ContentHandler;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.Map;
+import javax.sound.sampled.AudioFileFormat;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.UnsupportedAudioFileException;
+//import java.util.logging.Level;
+//import java.util.logging.Logger;
 import org.apache.tika.exception.TikaException;
-//import jdk.internal.org.xml.sax.helpers.DefaultHandler;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.helpers.DefaultHandler;
 import org.apache.tika.metadata.Metadata;
 import org.apache.tika.parser.ParseContext;
 import org.apache.tika.parser.Parser;
 import org.apache.tika.parser.mp3.Mp3Parser;
+import org.jaudiotagger.audio.AudioFile;
+import org.jaudiotagger.audio.AudioFileIO;
+import org.jaudiotagger.audio.exceptions.CannotReadException;
+import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
+import org.jaudiotagger.audio.exceptions.ReadOnlyFileException;
+import org.jaudiotagger.tag.TagException;
 import org.xml.sax.SAXException;
 
 /**
@@ -44,7 +45,21 @@ import org.xml.sax.SAXException;
  * @author Kalle Wilsen
  */
 public final class MusikAfspiller { 
-    File file = new File("C:\\Users\\Kalle Wilsen\\Documents\\Skoleopgaver\\Java - Objektorienteret programmering\\Projekter\\MusikTjeneste\\src\\musiktjeneste\\bip.mp3");
+    //File file = new File("C:\\Users\\Kalle Wilsen\\Music\\Destiny s Child - Say My Name (Cyril Hahn Remix) [mp3edm.eu].mp3");
+    //File file = new File("C:\\Users\\Kalle Wilsen\\Documents\\Skoleopgaver\\Java - Objektorienteret programmering\\Projekter\\MusikTjeneste\\src\\musiktjeneste\\bip.mp3");
+    //File file = new File("C:\\Users\\Kalle Wilsen\\Music\\Flume - Say It ft. Tove Lo (Illenium Remix).mp3");
+    String pathDir;
+    File file = new File(pathDir);
+    String path = file.toString();
+    
+    
+    
+    
+    
+    File dir = new File("\\Users\\Kalle Wilsen\\Music\\");
+    String[] listArray = dir.list();
+    
+    
     public String filename = file.getName();
     GUI afspillerPanel;
     
@@ -67,6 +82,8 @@ public final class MusikAfspiller {
     public boolean montørTilstand = false;
     
     public boolean alwaysUpdate = true;
+    
+    public int duration;
 
     Date dato = new Date();
     java.util.Scanner tastatur = new java.util.Scanner(System.in);  // Opreter Scanner class med navn "tastatur"
@@ -79,13 +96,19 @@ public final class MusikAfspiller {
     public String artistName;
     public String albumName;
     
-    public MusikAfspiller() throws IOException, FileNotFoundException{
+    public MusikAfspiller() throws IOException, FileNotFoundException, UnsupportedAudioFileException, CannotReadException, TagException, ReadOnlyFileException, InvalidAudioFrameException{
         indlæsBrugere();    // indlæser brugere fra "Brugere.txt"
         indlæsOmsætning();  // indlæser tidligere omsætning. Info til montør
-        System.out.println("Startup complete =)");
         
-        String path = ("C:\\Users\\Kalle Wilsen\\Documents\\Skoleopgaver\\Java - Objektorienteret programmering\\Projekter\\MusikTjeneste\\src\\musiktjeneste\\bip.mp3");
+        
+        
+        
       try{      
+          AudioFile audioFile = AudioFileIO.read(file);
+          duration = audioFile.getAudioHeader().getTrackLength();
+          
+        
+        
         InputStream input = new FileInputStream(new File(path));
         ContentHandler handler = new DefaultHandler();
         Metadata metadata = new Metadata();
@@ -97,6 +120,7 @@ public final class MusikAfspiller {
         artistName = metadata.get("xmpDM:artist");
         albumName = metadata.get("xmpDM:album");
         
+        System.out.println("Startopsætning fuldført");
       } catch (IOException | TikaException | SAXException e){
           
       }
@@ -105,21 +129,11 @@ public final class MusikAfspiller {
     }
     
     
-
-public void initialize()
-{
-    System.out.println("Initialize complete");
-}
-    
-public void updateList()
-{
-    filename = file.getName();
-
-}
     
 public void update()
     {
-        System.out.println("update blev kaldt");
+        System.out.println("Update blev kaldt");
+        afspillerPanel.initialize();
     new Thread(){
     public void run(){
      while (true){
@@ -271,8 +285,8 @@ public void resume(long resumeTime)
                    }
 
                    Brugere bruger = new Brugere();
-                   bruger.navn = navn;
-                   bruger.abonnent = abonnent;
+                   bruger.setNavn(navn);                // benytter princippet bag indkapsling af klasser
+                   bruger.setAbonnentStatus(abonnent);  // -||-
 
                    BrugerListe.add(bruger);
                    linje = input.readLine(); // læs en ny linje
@@ -289,15 +303,15 @@ public void resume(long resumeTime)
     public void udskrivBrugere()
     {
         for (Brugere n: BrugerListe){
-            System.out.print(n.navn);
+            System.out.print(n.getNavn());
             
             
-            if( n.abonnent == true)
+            if( n.getAbonnentStatus() == true)
             {
                 System.out.println("\t Er abonnent");
             } 
             
-            if (n.abonnent == false)
+            if (n.getAbonnentStatus() == false)
             {
                 System.out.println("\t Er ikke abonnent");
             }
@@ -353,6 +367,36 @@ public void resume(long resumeTime)
             System.out.println("Koden er forkert");
             montørTilstand = false;
             HandlingerListe.add("Montørtilstand forsøgt aktiveret, person skrev koden" + kode);
+        }
+    }
+    
+    private void skrivLog() throws IOException
+    {
+        
+        FileWriter fil = new FileWriter ("log.txt");
+        PrintWriter ud = new PrintWriter(fil);
+        
+        for (String s: HandlingerListe){    // gennemgå hele arraylisten
+            ud.println(s);                  // udskriv hvert string element, på en ny linje i filen log.txt
+        }
+        ud.close();                         // luk outputstream
+    }
+    
+    public void getLog() throws IOException
+    {
+        if ( montørTilstand == false){
+            System.out.println("Log først ind som montør");
+            }
+        else if( montørTilstand == true){
+            BufferedReader ind = new BufferedReader(new FileReader("log.txt"));
+            
+            String linje = ind.readLine();
+            while( linje != null )          // læs indtil filen er tom
+            {
+                System.out.println(linje);
+                ind.readLine();             // læs ny linje
+            }
+            ind.close();                    // luk inputstream
         }
     }
 }

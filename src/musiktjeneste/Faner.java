@@ -6,6 +6,11 @@
 package musiktjeneste;
 
 import java.io.*;
+import javax.sound.sampled.UnsupportedAudioFileException;
+import org.jaudiotagger.audio.exceptions.CannotReadException;
+import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
+import org.jaudiotagger.audio.exceptions.ReadOnlyFileException;
+import org.jaudiotagger.tag.TagException;
 
 /**
  *
@@ -17,7 +22,7 @@ public class Faner extends javax.swing.JPanel {
      * Creates new form Faner
      * @throws java.io.IOException
      */
-    public Faner() throws IOException {
+    public Faner() throws IOException, FileNotFoundException, UnsupportedAudioFileException, CannotReadException, TagException, ReadOnlyFileException, InvalidAudioFrameException {
         initComponents();
 
         gUI1.ejer = this;

@@ -2,8 +2,10 @@
 package musiktjeneste;
 
 import java.awt.event.ActionEvent;
+import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import static java.util.Collections.list;
 import java.util.Date;
 import java.util.TimeZone;
 import java.util.logging.Level;
@@ -85,6 +87,11 @@ public class GUI extends javax.swing.JPanel {
             String[] strings = {};
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
+        });
+        jList1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jList1MouseClicked(evt);
+            }
         });
         jScrollPane1.setViewportView(jList1);
 
@@ -171,8 +178,6 @@ public class GUI extends javax.swing.JPanel {
             jLabel2.setText("Play");
             jButton1.setText("Pause");
             afspiller.afspil();
-            
-         
                     
         }
         else
@@ -212,6 +217,14 @@ public class GUI extends javax.swing.JPanel {
         
     }//GEN-LAST:event_jSlider1MouseReleased
 
+    private void jList1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jList1MouseClicked
+        if (evt.getClickCount() == 2) {
+            int index = jList1.locationToIndex(evt.getPoint());
+            System.out.println(index);
+            System.out.println(afspiller.listArray[index]);
+        }
+    }//GEN-LAST:event_jList1MouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
@@ -222,7 +235,7 @@ public class GUI extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JList<String> jList1;
+    public javax.swing.JList<String> jList1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSlider jSlider1;
     // End of variables declaration//GEN-END:variables
@@ -232,19 +245,29 @@ public class GUI extends javax.swing.JPanel {
     SwingUtilities.invokeLater(new Runnable() {
     public void run() {
         try {
-            int tid, fuldSangTid;
+            int tid = 0;
             
             if(afspiller.songLength!=0)
             {
-            tid = ((int) (( ( afspiller.songLength - ( afspiller.FIS.available()) ) / 24000 )));
-            fuldSangTid = (int)((afspiller.songLength)/(24000));
+                if((int)(afspiller.songLength/24000)==afspiller.duration)
+                {
+                tid = ((int)(((afspiller.songLength)-(afspiller.FIS.available()))/24000));  // 192 BITrate
+                }
+                else if((int)(afspiller.songLength/40000)==afspiller.duration)
+                { 
+                tid = ((int)(((afspiller.songLength)-(afspiller.FIS.available()))/40000));  // 320 BITrate
+                }
+                else if((int)(afspiller.songLength/16000)==afspiller.duration)
+                { 
+                tid = ((int)(((afspiller.songLength)-(afspiller.FIS.available()))/16000));  // 128 BITrate
+                }
+            
             jSlider1.setMaximum((int) ((afspiller.songLength)));
             jSlider1.setValue((int) (( afspiller.songLength - ( afspiller.FIS.available()) )));
             }
             else
             {
                 tid=0;
-                fuldSangTid=0;
             }
             TimeZone tz = TimeZone.getTimeZone("UTC");
             SimpleDateFormat df = new SimpleDateFormat("mm:ss");
@@ -254,10 +277,8 @@ public class GUI extends javax.swing.JPanel {
             
             SimpleDateFormat df2 = new SimpleDateFormat("mm:ss");
             df.setTimeZone(tz);
-            String millisString2 = df.format(new Date(fuldSangTid*1000));
+            String millisString2 = df.format(new Date(afspiller.duration*1000));
             jLabel4.setText(millisString2);
-            
-            
             
 
             jLabel5.setText(afspiller.songName);
@@ -265,10 +286,25 @@ public class GUI extends javax.swing.JPanel {
             jLabel7.setText(afspiller.albumName);
             
             
+            
         } catch (IOException ex) {
         }
     }
     });     
+ }
+ 
+ 
+ public void initialize()
+ { 
+     
+    DefaultListModel DLM = new DefaultListModel();
+    for(String counter:afspiller.listArray){
+    DLM.addElement(counter);
+    }
+    jList1.setModel(DLM);
+
+    
+ 
  }
 }
 
