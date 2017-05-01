@@ -48,16 +48,14 @@ public final class MusikAfspiller {
     //File file = new File("C:\\Users\\Kalle Wilsen\\Music\\Destiny s Child - Say My Name (Cyril Hahn Remix) [mp3edm.eu].mp3");
     //File file = new File("C:\\Users\\Kalle Wilsen\\Documents\\Skoleopgaver\\Java - Objektorienteret programmering\\Projekter\\MusikTjeneste\\src\\musiktjeneste\\bip.mp3");
     //File file = new File("C:\\Users\\Kalle Wilsen\\Music\\Flume - Say It ft. Tove Lo (Illenium Remix).mp3");
-    String pathDir;
-    File file = new File(pathDir);
-    String path = file.toString();
+    File file = new File("");
     
     
     
     
     
     File dir = new File("\\Users\\Kalle Wilsen\\Music\\");
-    String[] listArray = dir.list();
+    File[] filesDir = dir.listFiles();
     
     
     public String filename = file.getName();
@@ -104,12 +102,21 @@ public final class MusikAfspiller {
         
         
       try{      
-          AudioFile audioFile = AudioFileIO.read(file);
-          duration = audioFile.getAudioHeader().getTrackLength();
+        songUpdate();
+        System.out.println("Startopsætning fuldført");
+      } catch (IOException e){
           
-        
-        
-        InputStream input = new FileInputStream(new File(path));
+      }
+       
+       
+    }
+    
+public void songUpdate() throws FileNotFoundException, CannotReadException, TagException, ReadOnlyFileException, InvalidAudioFrameException
+{
+    try{     
+        AudioFile audioFile = AudioFileIO.read(file);
+        duration = audioFile.getAudioHeader().getTrackLength();
+        InputStream input = new FileInputStream(new File(file.getPath()));
         ContentHandler handler = new DefaultHandler();
         Metadata metadata = new Metadata();
         Parser parser = new Mp3Parser();
@@ -119,16 +126,10 @@ public final class MusikAfspiller {
         songName = metadata.get("title");
         artistName = metadata.get("xmpDM:artist");
         albumName = metadata.get("xmpDM:album");
-        
-        System.out.println("Startopsætning fuldført");
-      } catch (IOException | TikaException | SAXException e){
+         } catch (IOException | TikaException | SAXException e){
           
       }
-       
-       
-    }
-    
-    
+}
     
 public void update()
     {
@@ -270,6 +271,12 @@ public void resume(long resumeTime)
                 while (linje != null )//&& linje.startsWith("\\//") == false) // læs fra filen indtil den er tom, og så længe linjen IKKE starter med //
                 {
             
+                   if (linje.startsWith("#"))
+                   {
+                       linje = input.readLine();
+                       continue;
+                   }
+                   
                    String navn;
                    boolean abonnent;
 

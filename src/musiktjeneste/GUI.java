@@ -3,6 +3,7 @@ package musiktjeneste;
 
 import java.awt.event.ActionEvent;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import static java.util.Collections.list;
@@ -23,6 +24,8 @@ public class GUI extends javax.swing.JPanel {
 
     Faner ejer;
     MusikAfspiller afspiller;
+    DefaultListModel DLMPath = new DefaultListModel();
+    DefaultListModel DLMName = new DefaultListModel();
     
 
     public GUI() throws IOException {
@@ -219,9 +222,30 @@ public class GUI extends javax.swing.JPanel {
 
     private void jList1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jList1MouseClicked
         if (evt.getClickCount() == 2) {
+            afspiller.stop();
             int index = jList1.locationToIndex(evt.getPoint());
             System.out.println(index);
-            System.out.println(afspiller.listArray[index]);
+            System.out.println(DLMName.get(index));
+            System.out.println(DLMPath.get(index));
+            afspiller.file=(File) DLMPath.get(index);
+            try {
+                afspiller.songUpdate();
+            } catch (FileNotFoundException ex) {
+            }
+
+            System.out.println(afspiller.songName);
+             System.out.println(afspiller.artistName);
+             System.out.println(afspiller.albumName);
+           // jLabel5.setText(afspiller.songName);
+           // jLabel6.setText(afspiller.artistName);
+           // jLabel7.setText(afspiller.albumName);
+            
+
+            jLabel2.setText("Play");
+            jButton1.setText("Pause");
+            afspiller.afspil();
+                    
+
         }
     }//GEN-LAST:event_jList1MouseClicked
 
@@ -246,7 +270,6 @@ public class GUI extends javax.swing.JPanel {
     public void run() {
         try {
             int tid = 0;
-            
             if(afspiller.songLength!=0)
             {
                 if((int)(afspiller.songLength/24000)==afspiller.duration)
@@ -256,6 +279,7 @@ public class GUI extends javax.swing.JPanel {
                 else if((int)(afspiller.songLength/40000)==afspiller.duration)
                 { 
                 tid = ((int)(((afspiller.songLength)-(afspiller.FIS.available()))/40000));  // 320 BITrate
+
                 }
                 else if((int)(afspiller.songLength/16000)==afspiller.duration)
                 { 
@@ -275,15 +299,9 @@ public class GUI extends javax.swing.JPanel {
             String millisString = df.format(new Date(tid*1000));
             jLabel1.setText(millisString);
             
-            SimpleDateFormat df2 = new SimpleDateFormat("mm:ss");
             df.setTimeZone(tz);
             String millisString2 = df.format(new Date(afspiller.duration*1000));
             jLabel4.setText(millisString2);
-            
-
-            jLabel5.setText(afspiller.songName);
-            jLabel6.setText(afspiller.artistName);
-            jLabel7.setText(afspiller.albumName);
             
             
             
@@ -297,11 +315,12 @@ public class GUI extends javax.swing.JPanel {
  public void initialize()
  { 
      
-    DefaultListModel DLM = new DefaultListModel();
-    for(String counter:afspiller.listArray){
-    DLM.addElement(counter);
+   
+    for(File dirCounter:afspiller.filesDir){
+    DLMPath.addElement(dirCounter);
+    DLMName.addElement(dirCounter.getName());
     }
-    jList1.setModel(DLM);
+    jList1.setModel(DLMName);
 
     
  
