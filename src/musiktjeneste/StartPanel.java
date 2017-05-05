@@ -5,6 +5,10 @@
  */
 package musiktjeneste;
 
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author Julian
@@ -98,7 +102,14 @@ public class StartPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        ejer.skiftPanel(2);
+        try {
+            boolean b = afspiller.montørLogin();
+            if ( b == true)
+            {
+                ejer.skiftPanel(2);    // skift til montørpanel
+            }
+        } catch (IOException ex) {
+        }
     }//GEN-LAST:event_jButton2ActionPerformed
 
 

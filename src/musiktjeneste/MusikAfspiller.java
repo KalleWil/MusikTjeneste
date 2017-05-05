@@ -98,17 +98,6 @@ public final class MusikAfspiller {
         indlæsBrugere();    // indlæser brugere fra "Brugere.txt"
         indlæsOmsætning();  // indlæser tidligere omsætning. Info til montør
         
-        
-        
-        
-      try{      
-        songUpdate();
-        System.out.println("Startopsætning fuldført");
-      } catch (IOException e){
-          
-      }
-       
-       
     }
     
 public void songUpdate() throws FileNotFoundException, CannotReadException, TagException, ReadOnlyFileException, InvalidAudioFrameException
@@ -126,8 +115,9 @@ public void songUpdate() throws FileNotFoundException, CannotReadException, TagE
         songName = metadata.get("title");
         artistName = metadata.get("xmpDM:artist");
         albumName = metadata.get("xmpDM:album");
+        
          } catch (IOException | TikaException | SAXException e){
-          
+          e.printStackTrace();
       }
 }
     
@@ -172,8 +162,13 @@ public void afspil()
         paused = false;
         stopped = false;
         System.out.println("Afspil");
+        
+            
         omsætning += 5;         // fortjenste på 5 kr pr. afspillet sang
         gemOmsætning();
+        
+        HandlingerListe.add("Følgende sang blev afspillet:  " + songName);
+        skrivLog();
         }catch(IOException e){} catch (JavaLayerException ex) {
             System.out.println("Sangen findes ikke");
             }
@@ -361,20 +356,25 @@ public void resume(long resumeTime)
         return montørTilstand;
     }
     
-    public void montørLogin(String kode)
+    public boolean montørLogin() throws IOException
     {
         System.out.println("Indtast kode");
-        String s = tastatur.nextLine();
+        String kode = tastatur.nextLine();
         if ("1337".equals(kode))    // 1337 er koden
         {
             System.out.println("Logget ind som montør");
             montørTilstand = true;
             HandlingerListe.add("Montørtilstand aktiveret");
+            skrivLog();
+            return true;
         } else{
             System.out.println("Koden er forkert");
             montørTilstand = false;
-            HandlingerListe.add("Montørtilstand forsøgt aktiveret, person skrev koden" + kode);
+            HandlingerListe.add("Montørtilstand forsøgt aktiveret, person skrev koden " + kode);
+            skrivLog();
+            return false;
         }
+
     }
     
     private void skrivLog() throws IOException
@@ -395,13 +395,14 @@ public void resume(long resumeTime)
             System.out.println("Log først ind som montør");
             }
         else if( montørTilstand == true){
+            
             BufferedReader ind = new BufferedReader(new FileReader("log.txt"));
             
             String linje = ind.readLine();
             while( linje != null )          // læs indtil filen er tom
             {
                 System.out.println(linje);
-                ind.readLine();             // læs ny linje
+                linje = ind.readLine();             // læs ny linje
             }
             ind.close();                    // luk inputstream
         }

@@ -1,6 +1,10 @@
 
 package musiktjeneste;
 
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.LayoutManager;
+import java.awt.ScrollPane;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -12,9 +16,16 @@ import java.util.TimeZone;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 import javax.swing.event.*;
+import javax.swing.table.TableModel;
+import org.jaudiotagger.audio.exceptions.CannotReadException;
+import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
+import org.jaudiotagger.audio.exceptions.ReadOnlyFileException;
+import org.jaudiotagger.tag.TagException;
 
 /**
  *
@@ -49,6 +60,8 @@ public class GUI extends javax.swing.JPanel {
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
 
         jButton1.setText("Play");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -106,6 +119,16 @@ public class GUI extends javax.swing.JPanel {
 
         jLabel7.setText("Album");
 
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+
+            }
+        ));
+        jScrollPane2.setViewportView(jTable1);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -113,7 +136,9 @@ public class GUI extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane1)
+                        .addContainerGap())
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, 156, Short.MAX_VALUE)
@@ -124,7 +149,7 @@ public class GUI extends javax.swing.JPanel {
                                 .addGap(18, 18, 18)
                                 .addComponent(jLabel1)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jSlider1, javax.swing.GroupLayout.DEFAULT_SIZE, 349, Short.MAX_VALUE)
+                                .addComponent(jSlider1, javax.swing.GroupLayout.DEFAULT_SIZE, 359, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(23, 23, 23))
@@ -135,14 +160,19 @@ public class GUI extends javax.swing.JPanel {
                                 .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(jLabel2)
-                                .addGap(65, 65, 65)))))
-                .addContainerGap())
+                                .addGap(65, 65, 65))))))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 414, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(106, 106, 106))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 285, Short.MAX_VALUE)
+                .addGap(20, 20, 20)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
@@ -231,14 +261,16 @@ public class GUI extends javax.swing.JPanel {
             try {
                 afspiller.songUpdate();
             } catch (FileNotFoundException ex) {
+            } catch (CannotReadException | TagException | ReadOnlyFileException | InvalidAudioFrameException ex) {
+                Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
             }
 
             System.out.println(afspiller.songName);
              System.out.println(afspiller.artistName);
              System.out.println(afspiller.albumName);
-           // jLabel5.setText(afspiller.songName);
-           // jLabel6.setText(afspiller.artistName);
-           // jLabel7.setText(afspiller.albumName);
+            jLabel5.setText(afspiller.songName);
+            jLabel6.setText(afspiller.artistName);
+            jLabel7.setText(afspiller.albumName);
             
 
             jLabel2.setText("Play");
@@ -261,7 +293,9 @@ public class GUI extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel7;
     public javax.swing.JList<String> jList1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSlider jSlider1;
+    public javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables
 
  public void update(){
@@ -284,6 +318,7 @@ public class GUI extends javax.swing.JPanel {
                 else if((int)(afspiller.songLength/16000)==afspiller.duration)
                 { 
                 tid = ((int)(((afspiller.songLength)-(afspiller.FIS.available()))/16000));  // 128 BITrate
+
                 }
             
             jSlider1.setMaximum((int) ((afspiller.songLength)));
@@ -317,12 +352,31 @@ public class GUI extends javax.swing.JPanel {
      
    
     for(File dirCounter:afspiller.filesDir){
+    String checkMp3;
+    checkMp3 = dirCounter.getPath();
+    if(checkMp3.endsWith(".mp3"))
+    {
     DLMPath.addElement(dirCounter);
     DLMName.addElement(dirCounter.getName());
     }
+    }
     jList1.setModel(DLMName);
-
     
+    
+    /*
+    String[] columnNames = {"Name","Artist","Album"};
+    Object[][] data = {
+        {"John","Painter", false},
+        {"Mark","Wanker", false}};
+     
+     
+    jTable1 = new JTable(data, columnNames);
+    jTable1.setPreferredScrollableViewportSize(new Dimension(500,50));
+    jTable1.setFillsViewportHeight(true);
+    
+    JScrollPane scrollPane = new JScrollPane(jTable1);
+    add(scrollPane);
+    */
  
  }
 }

@@ -55,6 +55,11 @@ public class MontørPanel extends javax.swing.JPanel {
         jButton2.setText("Transaktioner");
 
         jButton3.setText("Logs");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         jButton4.setText("Afslut");
         jButton4.addActionListener(new java.awt.event.ActionListener() {
@@ -145,6 +150,14 @@ public class MontørPanel extends javax.swing.JPanel {
             Logger.getLogger(MontørPanel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jButton6ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        try {
+            afspiller.getLog(); // udskriv log
+        } catch (IOException ex) {
+            Logger.getLogger(MontørPanel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButton3ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
