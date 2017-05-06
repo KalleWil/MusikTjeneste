@@ -20,6 +20,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.sound.sampled.AudioFileFormat;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.UnsupportedAudioFileException;
@@ -100,12 +102,12 @@ public final class MusikAfspiller {
         
     }
     
-public void songUpdate() throws FileNotFoundException, CannotReadException, TagException, ReadOnlyFileException, InvalidAudioFrameException
+public void songUpdate(File pathFile) throws FileNotFoundException, CannotReadException, TagException, ReadOnlyFileException, InvalidAudioFrameException
 {
     try{     
-        AudioFile audioFile = AudioFileIO.read(file);
+        AudioFile audioFile = AudioFileIO.read(pathFile);
         duration = audioFile.getAudioHeader().getTrackLength();
-        InputStream input = new FileInputStream(new File(file.getPath()));
+        InputStream input = new FileInputStream(new File(pathFile.getPath()));
         ContentHandler handler = new DefaultHandler();
         Metadata metadata = new Metadata();
         Parser parser = new Mp3Parser();
@@ -124,7 +126,11 @@ public void songUpdate() throws FileNotFoundException, CannotReadException, TagE
 public void update()
     {
         System.out.println("Update blev kaldt");
-        afspillerPanel.initialize();
+        try {
+            afspillerPanel.initialize();
+        } catch (FileNotFoundException | CannotReadException | TagException | ReadOnlyFileException | InvalidAudioFrameException ex) {
+            
+        }
     new Thread(){
     public void run(){
      while (true){
