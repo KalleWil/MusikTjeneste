@@ -84,6 +84,8 @@ public final class MusikAfspiller {
     public boolean alwaysUpdate = true;
     
     public int duration;
+    
+    public int playlistIndex;
 
     Date dato = new Date();
     java.util.Scanner tastatur = new java.util.Scanner(System.in);  // Opreter Scanner class med navn "tastatur"
@@ -161,7 +163,8 @@ public void afspil()
         
         new Thread(){
             public void run(){
-                try{ player.play(); }
+                try{ player.play();
+                }
                 catch (Exception e){}
             }
         }.start();
