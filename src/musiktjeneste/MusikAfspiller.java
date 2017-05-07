@@ -5,6 +5,8 @@
  */
 package musiktjeneste;
 
+import com.mpatric.mp3agic.InvalidDataException;
+import com.mpatric.mp3agic.UnsupportedTagException;
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -125,7 +127,7 @@ public void songUpdate(File pathFile) throws FileNotFoundException, CannotReadEx
       }
 }
     
-public void update()
+public void update() throws IOException, UnsupportedTagException, InvalidDataException
     {
         System.out.println("Update blev kaldt");
         try {
