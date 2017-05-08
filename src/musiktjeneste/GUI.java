@@ -23,10 +23,13 @@ import org.jaudiotagger.audio.exceptions.ReadOnlyFileException;
 import org.jaudiotagger.tag.TagException;
 import com.mpatric.mp3agic.Mp3File;
 import com.mpatric.mp3agic.UnsupportedTagException;
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.Image;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
+import javax.swing.JTable;
+import javax.swing.table.TableCellRenderer;
 
 
 
@@ -40,6 +43,7 @@ public class GUI extends javax.swing.JPanel{
     MusikAfspiller afspiller;
     DefaultListModel DLMPath = new DefaultListModel();
     DefaultListModel DLMName = new DefaultListModel();
+    DefaultTableModel overtableModel = new DefaultTableModel();
     
 
     public GUI() throws IOException {
@@ -77,7 +81,7 @@ public class GUI extends javax.swing.JPanel{
 
             },
             new String [] {
-                "", "Song name", "Artist", "Album", "Songlength"
+                "", "Song name", "Artist", "Album", ""
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -88,11 +92,15 @@ public class GUI extends javax.swing.JPanel{
                 return canEdit [columnIndex];
             }
         });
+        jTable1.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_LAST_COLUMN);
         jTable1.setFillsViewportHeight(true);
         jTable1.setGridColor(new java.awt.Color(0, 0, 0));
+        jTable1.setRowHeight(35);
+        jTable1.setRowMargin(-10);
         jTable1.setSelectionBackground(new java.awt.Color(51, 51, 51));
         jTable1.setSelectionForeground(new java.awt.Color(204, 204, 204));
         jTable1.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        jTable1.getTableHeader().setReorderingAllowed(false);
         jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jTable1MouseClicked(evt);
@@ -177,53 +185,56 @@ public class GUI extends javax.swing.JPanel{
                 .addContainerGap()
                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 268, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, 287, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 287, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 278, Short.MAX_VALUE)))
                 .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panel1Layout.createSequentialGroup()
-                        .addGap(61, 61, 61)
+                        .addGap(67, 67, 67)
                         .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 61, Short.MAX_VALUE)
                         .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 61, Short.MAX_VALUE)
                         .addComponent(jButton2))
-                    .addGroup(panel1Layout.createSequentialGroup()
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel1Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jSlider1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jSlider1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 9, Short.MAX_VALUE)))
+                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         panel1Layout.setVerticalGroup(
             panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel1Layout.createSequentialGroup()
-                .addGap(0, 11, Short.MAX_VALUE)
+                .addGap(11, 11, 11)
+                .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton1)
+                    .addComponent(jButton3)
+                    .addComponent(jButton2)
+                    .addComponent(jLabel2)
+                    .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, 23, Short.MAX_VALUE))
                 .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panel1Layout.createSequentialGroup()
-                        .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jButton1)
-                            .addComponent(jButton3)
-                            .addComponent(jButton2)
-                            .addComponent(jLabel2))
                         .addGap(29, 29, 29)
                         .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jSlider1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jSlider1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(panel1Layout.createSequentialGroup()
-                        .addComponent(jLabel5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel6)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(18, 18, 18))
+            .addGroup(panel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -242,7 +253,7 @@ public class GUI extends javax.swing.JPanel{
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 360, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 359, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(panel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -258,6 +269,8 @@ public class GUI extends javax.swing.JPanel{
             jLabel2.setText("Pause");
             jButton1.setText("Play");
             afspiller.pause();
+            overtableModel.setValueAt(" | |", afspiller.playlistIndex, 0);
+            
             
         }
         else if (afspiller.paused == false && jSlider1.getValue()==0)
@@ -266,6 +279,7 @@ public class GUI extends javax.swing.JPanel{
             jLabel2.setText("Play");
             jButton1.setText("Pause");
             afspiller.afspil();
+            overtableModel.setValueAt(" ►", afspiller.playlistIndex, 0);
                     
         }
         else
@@ -274,6 +288,7 @@ public class GUI extends javax.swing.JPanel{
             jLabel2.setText("Resume");
             jButton1.setText("Pause");
             afspiller.resume(jSlider1.getValue());
+            overtableModel.setValueAt(" ►", afspiller.playlistIndex, 0);
             
         }
     }//GEN-LAST:event_jButton1ActionPerformed
@@ -287,6 +302,7 @@ public class GUI extends javax.swing.JPanel{
     jLabel1.setText("00:00");
     jButton1.setText("Play");
     afspiller.stop();
+    overtableModel.setValueAt("", afspiller.playlistIndex, 0);
     
     }//GEN-LAST:event_jButton3ActionPerformed
 
@@ -328,6 +344,10 @@ public class GUI extends javax.swing.JPanel{
             jLabel2.setText("Play");
             jButton1.setText("Pause");
             afspiller.afspil();
+            for(int counter=0;counter<overtableModel.getRowCount();counter++){
+                overtableModel.setValueAt("", counter, 0);
+            }
+            overtableModel.setValueAt(" ►", index, 0);
             try {        
                 getAlbumart();
             } catch (IOException | TagException | ReadOnlyFileException | InvalidAudioFrameException | UnsupportedTagException | InvalidDataException ex) {
@@ -423,9 +443,7 @@ public class GUI extends javax.swing.JPanel{
                     afspiller.file=(File) DLMPath.get(afspiller.playlistIndex);
                     try {
                 afspiller.songUpdate(afspiller.file);
-            } catch (FileNotFoundException ex) {
-                ex.printStackTrace();
-            } catch (CannotReadException | TagException | ReadOnlyFileException | InvalidAudioFrameException ex) {
+            } catch (   FileNotFoundException | CannotReadException | TagException | ReadOnlyFileException | InvalidAudioFrameException ex) {
                 ex.printStackTrace();
             }
 
@@ -449,6 +467,10 @@ public class GUI extends javax.swing.JPanel{
             jLabel2.setText("Play");
             jButton1.setText("Pause");
             afspiller.afspil();
+            overtableModel.setValueAt("", afspiller.playlistIndex-1, 0);
+            overtableModel.setValueAt(" ►", afspiller.playlistIndex, 0);
+
+            
                         try {
                             getAlbumart();
                         } catch (TagException | ReadOnlyFileException | InvalidAudioFrameException | UnsupportedTagException | InvalidDataException ex) {
@@ -491,18 +513,30 @@ public class GUI extends javax.swing.JPanel{
             }
     DLMName.addElement(dirCounter.getName());
     DefaultTableModel tableModel = (DefaultTableModel)jTable1.getModel();
+    overtableModel = tableModel;
     TimeZone tz = TimeZone.getTimeZone("UTC");
     SimpleDateFormat df = new SimpleDateFormat("mm:ss");
     df.setTimeZone(tz);
     String millisString = df.format(new Date(afspiller.duration*1000));
     //ImageIcon iconTest = new ImageIcon(getClass().getResource("node.jpg"));
     if(afspiller.songName!=null){
-    tableModel.addRow(new Object[]{null, afspiller.songName,afspiller.artistName,afspiller.albumName,millisString});
+    overtableModel.addRow(new Object[]{null, afspiller.songName,afspiller.artistName,afspiller.albumName,millisString});
     }
     else{
-        tableModel.addRow(new Object[]{null,dirCounter.getName(),null,null,millisString});
+        overtableModel.addRow(new Object[]{null,dirCounter.getName(),null,null,millisString});
     }
-    
+    jTable1.getTableHeader().setOpaque(false);
+    jTable1.getTableHeader().setBackground(Color.black);
+    jTable1.getTableHeader().setForeground(Color.gray);
+    //jTable1.getTableHeader().setBorder(null);
+    jScrollPane2.setBorder(BorderFactory.createEmptyBorder());
+    jTable1.getColumnModel().getColumn(0).setMaxWidth(1000);
+    jTable1.getColumnModel().getColumn(0).setPreferredWidth(25);
+    jTable1.getColumnModel().getColumn(2).setMaxWidth(1000);
+    jTable1.getColumnModel().getColumn(2).setPreferredWidth(150);
+    jTable1.getColumnModel().getColumn(3).setMaxWidth(1000);
+    jTable1.getColumnModel().getColumn(3).setPreferredWidth(400);
+
     }
     }
  }
@@ -528,11 +562,7 @@ public class GUI extends javax.swing.JPanel{
 
         }
 }
-       
-   
  
-
-
  
  
 }
