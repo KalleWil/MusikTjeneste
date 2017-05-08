@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package musiktjeneste;
 
 import com.mpatric.mp3agic.InvalidDataException;
@@ -15,20 +11,12 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import javazoom.jl.decoder.JavaLayerException;
-import javazoom.jl.player.*;
 import javazoom.jl.player.advanced.AdvancedPlayer;
 import java.io.*;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.sound.sampled.AudioFileFormat;
-import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.UnsupportedAudioFileException;
-//import java.util.logging.Level;
-//import java.util.logging.Logger;
 import org.apache.tika.exception.TikaException;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.helpers.DefaultHandler;
@@ -93,18 +81,23 @@ public final class MusikAfspiller {
     java.util.Scanner tastatur = new java.util.Scanner(System.in);  // Opreter Scanner class med navn "tastatur"
  
     
-    private ArrayList<Brugere> BrugerListe = new ArrayList<Brugere>(); // arraylist med elementer af typen 'Brugere' 
+    public ArrayList<Brugere> BrugerListe = new ArrayList<Brugere>(); // arraylist med elementer af typen 'Brugere' 
     private ArrayList<String> HandlingerListe = new ArrayList<String>();    // Til at logge alle relevante handlinger
     
     public String songName;
     public String artistName;
     public String albumName;
     
+    
+    
+    
     public MusikAfspiller() throws IOException, FileNotFoundException, UnsupportedAudioFileException, CannotReadException, TagException, ReadOnlyFileException, InvalidAudioFrameException{
         indlæsBrugere();    // indlæser brugere fra "Brugere.txt"
         indlæsOmsætning();  // indlæser tidligere omsætning. Info til montør
-        
+        System.out.println("Startup complete");
     }
+    
+    
     
 public void songUpdate(File pathFile) throws FileNotFoundException, CannotReadException, TagException, ReadOnlyFileException, InvalidAudioFrameException
 {
@@ -133,57 +126,69 @@ public void update() throws IOException, UnsupportedTagException, InvalidDataExc
         try {
             afspillerPanel.initialize();
         } catch (FileNotFoundException | CannotReadException | TagException | ReadOnlyFileException | InvalidAudioFrameException ex) {
-            
+            ex.printStackTrace();
         }
-    new Thread(){
-    public void run(){
-     while (true){
-         try {       
-             afspillerPanel.update();
-             Thread.sleep(100);
-         } catch (InterruptedException ex) {
-         }
+    new Thread()
+    {
+    public void run()
+    {
+        while (true)
+        {
+            try 
+            {       
+                afspillerPanel.update();
+                Thread.sleep(100);
+            } catch (InterruptedException ex) 
+                {
+                    ex.printStackTrace();
+                }
         }
     }
-    }.start();
-
-        
-    }
+}.start();
+}
     
 public void afspil()
-{ if(stopped==true)
-{
-    try{
-        FIS = new FileInputStream(file);
-        BIS = new BufferedInputStream(FIS);
-        player = new AdvancedPlayer(BIS);
+{ 
+    if(stopped==true)
+    {
+        try
+        {
+            FIS = new FileInputStream(file);
+            BIS = new BufferedInputStream(FIS);
+            player = new AdvancedPlayer(BIS);
 
-        songLength = FIS.available(); // returnerer estimat af, hvor mange bytes sangen fylder  // har en værdi på 4379262 bytes
-        songLengthCurrent = songLength;
-        //fileLocation = file + "";
+            songLength = FIS.available(); // returnerer estimat af, hvor mange bytes sangen fylder  // har en værdi på 4379262 bytes
+            songLengthCurrent = songLength;
+            //fileLocation = file + "";
 
-        
-        new Thread(){
-            public void run(){
-                try{ player.play();
+
+            new Thread()
+            {
+                public void run(){
+                    try{ player.play();
+                    }
+                    catch (Exception e)
+                    {
+                        e.printStackTrace();
+                    }
                 }
-                catch (Exception e){}
-            }
-        }.start();
-        paused = false;
-        stopped = false;
-        System.out.println("Afspil");
-        
-            
-        omsætning += 5;         // fortjenste på 5 kr pr. afspillet sang
-        gemOmsætning();
-        
-        HandlingerListe.add("Følgende sang blev afspillet:  " + songName);
-        skrivLog();
-        }catch(IOException e){} catch (JavaLayerException ex) {
+            }.start();
+            paused = false;
+            stopped = false;
+            System.out.println("Afspil");
+
+
+            omsætning += 5;         // fortjenste på 5 kr pr. afspillet sang
+            gemOmsætning();
+
+            HandlingerListe.add("Følgende sang blev afspillet:  " + songName);
+            skrivLog();
+        }catch(IOException e){} catch (JavaLayerException ex) 
+        {
             System.out.println("Sangen findes ikke");
-            }
-}
+            ex.printStackTrace();
+        }
+    }
 } 
 
 public void stop(){
@@ -209,6 +214,7 @@ public void pause(){
            paused = true;
            System.out.println("Pause");
        } catch (IOException ex) {
+           ex.printStackTrace();
        }
    }
 }
@@ -231,14 +237,19 @@ public void resume(long resumeTime)
             public void run(){
                 try{ player.play(); 
                 }
-                catch (JavaLayerException e){}
+                catch (JavaLayerException e){
+                    e.printStackTrace();
+                }
             }
         }   .start();
         paused = false;
         stopped = false;
         System.out.println("Resume");
-        }   catch(IOException | JavaLayerException e){}
-} 
+        }   catch(IOException | JavaLayerException e)
+        {
+            e.printStackTrace();
+        }
+    } 
 }
 
 
@@ -252,7 +263,7 @@ public void resume(long resumeTime)
         BufferedReader input = new BufferedReader(new FileReader("Brugere.txt"));
         String linje = input.readLine();
         
-        if ( input.readLine() == null ) // hvis filen er tom, indlæs da standardindstillinger
+        if ( input.readLine() == null ) // hvis filen er tom, indlæs da standardindstillinger - Dette er for at undgå programfejl
         {
             FileWriter fil = new FileWriter("Brugere.txt");
             try (PrintWriter ud = new PrintWriter(fil))
@@ -260,37 +271,34 @@ public void resume(long resumeTime)
                 ud.println("// Dette dokument indeholder alle brugere af vores musikafspillertjeneste");
                 ud.println("// 1 angiver premiumabonnement");
                 ud.println("// 0 angiver ikke-premiumabonnement");
-                ud.println("Julian 1");
-                ud.println("Kalle 1");
-                ud.println("Lasse 1");
-                ud.println("Troels 0");
+                ud.println("Julian 1234 1");
+                ud.println("Kalle 1234 1");
+                ud.println("Lasse 1234 1");
+                ud.println("Troels 1234 0");
                 ud.close(); // lukker outputstreamen til denne fil
             }
             fil.close();
         }else {
-            /*
-                    if ( linje.startsWith("/") == false){
-                System.out.println("Det virkede");
-            }
-            */
             {
-                while (linje != null )//&& linje.startsWith("\\//") == false) // læs fra filen indtil den er tom, og så længe linjen IKKE starter med //
+                while (linje != null ) // læs fra filen indtil den er tom, og så længe linjen IKKE starter med //
                 {
-            
-                   if (linje.startsWith("#"))
-                   {
-                       linje = input.readLine();
-                       continue;
-                   }
-                   
+                    if (linje.startsWith("#"))
+                    {
+                        linje = input.readLine();
+                        continue;
+                    }
+                    
                    String navn;
+                   String kode;
                    boolean abonnent;
 
                    String[] bidder;
                    bidder = linje.split(" ");  // split ordende op i bidder adskildt af mellemrum, og gem hver enkelt bid i array 
-                   navn = bidder[0];
 
-                   if (Integer.parseInt(bidder[1]) == 1) // brugeren er premiumabonnent hvis der står "1" ud fra deres navn i filen
+                   navn = bidder[0];
+                   kode = bidder[1];
+
+                   if (Integer.parseInt(bidder[2]) == 1) // brugeren er premiumabonnent hvis der står "1" ud fra deres navn i filen
                    {
                        abonnent = true;
                    } else {
@@ -300,19 +308,21 @@ public void resume(long resumeTime)
                    Brugere bruger = new Brugere();
                    bruger.setNavn(navn);                // benytter princippet bag indkapsling af klasser
                    bruger.setAbonnentStatus(abonnent);  // -||-
+                   bruger.setKode(kode);
 
                    BrugerListe.add(bruger);
                    linje = input.readLine(); // læs en ny linje
-     
                    antalAfBrugere++; 
                 }
             }
         }        
     }
     
+    
     /*
     * Metode til at udskrive de nuværende brugere af musiktjenesten
     */
+    
     public void udskrivBrugere()
     {
         for (Brugere n: BrugerListe){
@@ -331,6 +341,12 @@ public void resume(long resumeTime)
         }
     }
     
+    
+    
+    /*
+    * Metode til at gemme omsætning i fil "Omsætning.txt"
+    */
+    
     public void gemOmsætning() throws IOException
     {
         FileWriter fil = new FileWriter("Omsætning.txt");
@@ -343,6 +359,12 @@ public void resume(long resumeTime)
         }    
 
     }
+    
+    
+    
+    /*
+    * Metode til at indlæse omsætningn fra tidligere dage, denne metode kaldes ved programstart
+    */
     
     private void indlæsOmsætning() throws IOException
     {
@@ -362,11 +384,19 @@ public void resume(long resumeTime)
         input.close();
     }
     
+    
+    /*
+    * Metode der returnerer den givne montørtilstand
+    */
+    
     private boolean getMontørLogin()
     {
         return montørTilstand;
     }
     
+    /*
+    * Metode til at logge ind som montør. Der kræves en bestemt kode før man er logget ind
+    */
     public boolean montørLogin() throws IOException
     {
         System.out.println("Indtast kode");
@@ -388,17 +418,31 @@ public void resume(long resumeTime)
 
     }
     
+    
+    
+    /*
+    * Metode til at skrive log
+    */
+    
     private void skrivLog() throws IOException
     {
         
         FileWriter fil = new FileWriter ("log.txt");
         PrintWriter ud = new PrintWriter(fil);
         
-        for (String s: HandlingerListe){    // gennemgå hele arraylisten
+        for (String s: HandlingerListe)     // gennemgå hele arraylisten
+        {    
             ud.println(s);                  // udskriv hvert string element, på en ny linje i filen log.txt
         }
         ud.close();                         // luk outputstream
     }
+    
+    
+    
+    
+    /*
+    * Metode til at læse logs, bruges kun fra montørpanel
+    */
     
     public void getLog() throws IOException
     {
@@ -417,5 +461,23 @@ public void resume(long resumeTime)
             }
             ind.close();                    // luk inputstream
         }
+    }
+    
+    
+    
+    /*
+    * Denne metode returnerer det element, hvor den givne bruger findes. Finds brugeren ikke returneres -1
+    * Metoden bruges til at logge ind i musikafspilleren
+    */
+    
+    public int findDenneBruger(String brugernavn)
+    {
+        int tæller = 0;
+        for (Brugere b : BrugerListe)
+        {
+            if (b.getNavn().matches(brugernavn)) return tæller;
+            tæller++;
+        }
+        return -1;
     }
 }

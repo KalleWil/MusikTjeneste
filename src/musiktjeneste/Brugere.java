@@ -12,8 +12,9 @@ package musiktjeneste;
 public class Brugere {
     
     private String navn;
+    private String kode;  
     private boolean abonnent;
-    
+ 
     
     public String getNavn(){
     return navn;
@@ -23,6 +24,10 @@ public class Brugere {
         return abonnent;
     }
 
+    public String getKode(){
+        return kode;
+    }
+     
     public void setNavn(String s) {
         navn = s;
     }
@@ -30,5 +35,8 @@ public class Brugere {
     public void setAbonnentStatus(boolean a) {
         abonnent = a;
     }
-   
+    
+    public void setKode(String s) {
+        kode = s;
+    }
 }

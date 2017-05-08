@@ -24,8 +24,9 @@ public class MusikTjeneste {
         
         JFrame vindue = new JFrame("Musiktjeneste");
         Faner faner = new Faner();
-
+        ImageIcon icon = new ImageIcon("NodeIcon.png");
         vindue.add(faner);
+        vindue.setIconImage(icon.getImage());
         vindue.pack();
         vindue.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         vindue.setVisible(true);

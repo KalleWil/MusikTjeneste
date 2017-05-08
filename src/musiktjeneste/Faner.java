@@ -8,8 +8,6 @@ package musiktjeneste;
 import com.mpatric.mp3agic.InvalidDataException;
 import com.mpatric.mp3agic.UnsupportedTagException;
 import java.io.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
@@ -32,17 +30,20 @@ public class Faner extends javax.swing.JPanel {
         gUI1.ejer = this;
         startPanel1.ejer = this;
         montørPanel1.ejer = this;
+        loginPanel1.ejer = this;
   
         MusikAfspiller afspiller = new MusikAfspiller();
         gUI1.afspiller = afspiller;
         montørPanel1.afspiller = afspiller;
         startPanel1.afspiller = afspiller;
+        loginPanel1.afspiller = afspiller;
         afspiller.afspillerPanel = gUI1;
         try {
             afspiller.update();
         } catch (UnsupportedTagException | InvalidDataException ex) {
+            ex.printStackTrace();
         }
-        skiftPanel(1); // start på afspillerpanel
+        skiftPanel(0); // start på afspillerpanel
     }
 
     /**
@@ -55,6 +56,7 @@ public class Faner extends javax.swing.JPanel {
     private void initComponents() {
 
         jTabbedPane1 = new javax.swing.JTabbedPane();
+        loginPanel1 = new musiktjeneste.LoginPanel();
         startPanel1 = new musiktjeneste.StartPanel();
         try {
             gUI1 = new musiktjeneste.GUI();
@@ -67,7 +69,10 @@ public class Faner extends javax.swing.JPanel {
             e1.printStackTrace();
         }
 
+        setPreferredSize(new java.awt.Dimension(1000, 600));
+
         jTabbedPane1.setPreferredSize(new java.awt.Dimension(503, 310));
+        jTabbedPane1.addTab("Login", loginPanel1);
         jTabbedPane1.addTab("Start", startPanel1);
         jTabbedPane1.addTab("Afspiller", gUI1);
         jTabbedPane1.addTab("Montør", montørPanel1);
@@ -76,11 +81,17 @@ public class Faner extends javax.swing.JPanel {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 783, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 880, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 496, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 496, Short.MAX_VALUE)
+                .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -88,6 +99,7 @@ public class Faner extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private musiktjeneste.GUI gUI1;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private musiktjeneste.LoginPanel loginPanel1;
     private musiktjeneste.MontørPanel montørPanel1;
     private musiktjeneste.StartPanel startPanel1;
     // End of variables declaration//GEN-END:variables
