@@ -5,7 +5,11 @@
  */
 package musiktjeneste;
 
+import com.mpatric.mp3agic.InvalidDataException;
+import com.mpatric.mp3agic.UnsupportedTagException;
 import java.io.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
@@ -34,7 +38,10 @@ public class Faner extends javax.swing.JPanel {
         montørPanel1.afspiller = afspiller;
         startPanel1.afspiller = afspiller;
         afspiller.afspillerPanel = gUI1;
-        afspiller.update();
+        try {
+            afspiller.update();
+        } catch (UnsupportedTagException | InvalidDataException ex) {
+        }
         skiftPanel(1); // start på afspillerpanel
     }
 

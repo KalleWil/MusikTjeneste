@@ -34,7 +34,7 @@ import javax.swing.ImageIcon;
  *
  * @author Kalle Wilsen
  */
-public class GUI extends javax.swing.JPanel {
+public class GUI extends javax.swing.JPanel{
 
     Faner ejer;
     MusikAfspiller afspiller;
@@ -112,11 +112,11 @@ public class GUI extends javax.swing.JPanel {
 
             },
             new String [] {
-                "Song name", "Artist", "Album"
+                "", "Song name", "Artist", "Album", "Songlength"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false
+                true, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -136,6 +136,9 @@ public class GUI extends javax.swing.JPanel {
             }
         });
         jScrollPane2.setViewportView(jTable1);
+        if (jTable1.getColumnModel().getColumnCount() > 0) {
+            jTable1.getColumnModel().getColumn(0).setResizable(false);
+        }
 
         jSlider1.setBackground(new java.awt.Color(0, 0, 0));
         jSlider1.setValue(0);
@@ -166,6 +169,9 @@ public class GUI extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane2)
+                        .addContainerGap())
+                    .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -188,10 +194,7 @@ public class GUI extends javax.swing.JPanel {
                                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(289, 289, 289))))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jScrollPane2)
-                        .addContainerGap())))
+                                .addGap(289, 289, 289))))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -413,6 +416,10 @@ public class GUI extends javax.swing.JPanel {
             jLabel2.setText("Play");
             jButton1.setText("Pause");
             afspiller.afspil();
+                        try {
+                            getAlbumart();
+                        } catch (TagException | ReadOnlyFileException | InvalidAudioFrameException | UnsupportedTagException | InvalidDataException ex) {
+                        }
             jTable1.setRowSelectionInterval(afspiller.playlistIndex,afspiller.playlistIndex);
                 }
                     else{
@@ -447,12 +454,18 @@ public class GUI extends javax.swing.JPanel {
             }
     DLMName.addElement(dirCounter.getName());
     DefaultTableModel tableModel = (DefaultTableModel)jTable1.getModel();
+    TimeZone tz = TimeZone.getTimeZone("UTC");
+    SimpleDateFormat df = new SimpleDateFormat("mm:ss");
+    df.setTimeZone(tz);
+    String millisString = df.format(new Date(afspiller.duration*1000));
+    //ImageIcon iconTest = new ImageIcon(getClass().getResource("node.jpg"));
     if(afspiller.songName!=null){
-    tableModel.addRow(new Object[]{afspiller.songName,afspiller.artistName,afspiller.albumName});
+    tableModel.addRow(new Object[]{null, afspiller.songName,afspiller.artistName,afspiller.albumName,millisString});
     }
     else{
-        tableModel.addRow(new Object[]{dirCounter.getName()});
+        tableModel.addRow(new Object[]{null,dirCounter.getName(),null,null,millisString});
     }
+    
     }
     }
  }
