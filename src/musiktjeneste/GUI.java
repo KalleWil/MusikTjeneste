@@ -25,9 +25,15 @@ import com.mpatric.mp3agic.Mp3File;
 import com.mpatric.mp3agic.UnsupportedTagException;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Frame;
 import java.awt.Image;
+import java.awt.Window;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JTable;
 import javax.swing.table.TableCellRenderer;
 
@@ -44,6 +50,11 @@ public class GUI extends javax.swing.JPanel{
     DefaultListModel DLMPath = new DefaultListModel();
     DefaultListModel DLMName = new DefaultListModel();
     DefaultTableModel overtableModel = new DefaultTableModel();
+    
+    
+    
+
+    
     
 
     public GUI() throws IOException {
@@ -361,6 +372,7 @@ public class GUI extends javax.swing.JPanel{
     }//GEN-LAST:event_jSlider1MouseClicked
 
     private void jSlider1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jSlider1MousePressed
+        afspiller.paused=true;
         afspiller.pause();
     }//GEN-LAST:event_jSlider1MousePressed
 
@@ -398,8 +410,9 @@ public class GUI extends javax.swing.JPanel{
     public void run() {
         try {
             int tid = 0;
-            if(afspiller.songLength!=0)
+            if(afspiller.songLength!=0 && afspiller.paused==false && afspiller.stopped==false)
             {
+
                 if((int)(afspiller.songLength/24000)==afspiller.duration)
                 {
                 tid = ((int)(((afspiller.songLength)-(afspiller.FIS.available()))/24000));  // 192 BITrate
@@ -414,9 +427,11 @@ public class GUI extends javax.swing.JPanel{
                 tid = ((int)(((afspiller.songLength)-(afspiller.FIS.available()))/16000));  // 128 BITrate
 
                 }
+                
             
             jSlider1.setMaximum((int) ((afspiller.songLength)));
-            jSlider1.setValue((int) (( afspiller.songLength - ( afspiller.FIS.available()) )));
+            int sliderValue = (int) (( afspiller.songLength - ( afspiller.FIS.available())));
+            jSlider1.setValue(sliderValue);
             }
             else
             {
@@ -518,17 +533,17 @@ public class GUI extends javax.swing.JPanel{
     SimpleDateFormat df = new SimpleDateFormat("mm:ss");
     df.setTimeZone(tz);
     String millisString = df.format(new Date(afspiller.duration*1000));
-    //ImageIcon iconTest = new ImageIcon(getClass().getResource("node.jpg"));
     if(afspiller.songName!=null){
     overtableModel.addRow(new Object[]{null, afspiller.songName,afspiller.artistName,afspiller.albumName,millisString});
     }
     else{
         overtableModel.addRow(new Object[]{null,dirCounter.getName(),null,null,millisString});
     }
+    /*
     jTable1.getTableHeader().setOpaque(false);
     jTable1.getTableHeader().setBackground(Color.black);
     jTable1.getTableHeader().setForeground(Color.gray);
-    //jTable1.getTableHeader().setBorder(null);
+    */
     jScrollPane2.setBorder(BorderFactory.createEmptyBorder());
     jTable1.getColumnModel().getColumn(0).setMaxWidth(1000);
     jTable1.getColumnModel().getColumn(0).setPreferredWidth(25);
@@ -563,6 +578,8 @@ public class GUI extends javax.swing.JPanel{
         }
 }
  
+
+    
  
  
 }
