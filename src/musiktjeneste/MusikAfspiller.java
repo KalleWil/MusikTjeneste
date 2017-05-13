@@ -268,9 +268,9 @@ public void resume(long resumeTime)
             FileWriter fil = new FileWriter("Brugere.txt");
             try (PrintWriter ud = new PrintWriter(fil))
             {
-                ud.println("// Dette dokument indeholder alle brugere af vores musikafspillertjeneste");
-                ud.println("// 1 angiver premiumabonnement");
-                ud.println("// 0 angiver ikke-premiumabonnement");
+                ud.println("# Dette dokument indeholder alle brugere af vores musikafspillertjeneste");
+                ud.println("# 1 angiver premiumabonnement");
+                ud.println("# 0 angiver ikke-premiumabonnement");
                 ud.println("Julian 1234 1");
                 ud.println("Kalle 1234 1");
                 ud.println("Lasse 1234 1");

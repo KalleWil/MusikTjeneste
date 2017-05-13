@@ -34,13 +34,13 @@ public class LoginPanel extends javax.swing.JPanel {
 
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jTextField2 = new javax.swing.JTextField();
         jButton2 = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
+        jPasswordField1 = new javax.swing.JPasswordField();
 
         jLabel1.setText("Login for at fortsætte");
 
@@ -79,9 +79,6 @@ public class LoginPanel extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(139, 139, 139)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jLabel4))
                     .addGroup(layout.createSequentialGroup()
@@ -89,9 +86,9 @@ public class LoginPanel extends javax.swing.JPanel {
                         .addComponent(jLabel2))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jPasswordField1, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jTextField2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 117, Short.MAX_VALUE))
                         .addGap(28, 28, 28)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -99,8 +96,11 @@ public class LoginPanel extends javax.swing.JPanel {
                         .addGap(28, 28, 28)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel5)
-                            .addComponent(jLabel3))))
-                .addContainerGap(142, Short.MAX_VALUE))
+                            .addComponent(jLabel3)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(139, 139, 139)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(118, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -118,9 +118,9 @@ public class LoginPanel extends javax.swing.JPanel {
                 .addComponent(jLabel4)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton2)
-                    .addComponent(jLabel5))
+                    .addComponent(jLabel5)
+                    .addComponent(jPasswordField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(123, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -138,23 +138,26 @@ public class LoginPanel extends javax.swing.JPanel {
         {
             String navnFraListe;
             navnFraListe = afspiller.BrugerListe.get(ElementNr).getNavn();
-            if ( s.matches(navnFraListe))
+            if (s.matches(navnFraListe))
             {
                 System.out.println("Fandt brugeren: " + navnFraListe);
                 System.out.println("Skriv kode nu");
-                jLabel4.setText("OK");
-            } else 
-            {
-                System.out.println("Brugeren findes ikke i systemet");
+                jLabel3.setText("OK");
             }
-        }
+            
+            
+        }else 
+            {
+            System.out.println("Brugeren findes ikke i systemet");
+            jLabel3.setText("Fejl");
+            }
         jLabel5.setText("...");
 
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
        String s;
-        s = jTextField1.getText();
+        s = jPasswordField1.getText();
         
         
         if (ElementNr != -1) // findDenneBruger returnerer -1 hvis der ikke findes en bruger med det givne brugernavn
@@ -163,15 +166,17 @@ public class LoginPanel extends javax.swing.JPanel {
             kodeFraListe = afspiller.BrugerListe.get(ElementNr).getKode();
             if ( s.matches(kodeFraListe))
             {
+                jLabel5.setText("OK");
                 ejer.skiftPanel(1); // skift til næste panel
                 System.out.println("Logger ind...");
-                jLabel5.setText("OK");
-            } else
-            {
-                System.out.println("Forkert kode");
+                
             }
-        }
-        jLabel4.setText("...");
+        }else
+    {
+        jLabel5.setText("Fejl");
+        System.out.println("Forkert kode");
+    }
+        jLabel3.setText("...");
     }//GEN-LAST:event_jButton2ActionPerformed
 
 
@@ -183,7 +188,7 @@ public class LoginPanel extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JPasswordField jPasswordField1;
     private javax.swing.JTextField jTextField2;
     // End of variables declaration//GEN-END:variables
 }

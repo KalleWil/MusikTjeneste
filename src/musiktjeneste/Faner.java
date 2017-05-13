@@ -9,6 +9,7 @@ import com.mpatric.mp3agic.InvalidDataException;
 import com.mpatric.mp3agic.UnsupportedTagException;
 import java.io.*;
 import javax.sound.sampled.UnsupportedAudioFileException;
+import javax.swing.plaf.basic.BasicTabbedPaneUI;
 import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
 import org.jaudiotagger.audio.exceptions.ReadOnlyFileException;
@@ -38,6 +39,10 @@ public class Faner extends javax.swing.JPanel {
         startPanel1.afspiller = afspiller;
         loginPanel1.afspiller = afspiller;
         afspiller.afspillerPanel = gUI1;
+        jTabbedPane1.setEnabled(false);
+        
+        
+        
         try {
             afspiller.update();
         } catch (UnsupportedTagException | InvalidDataException ex) {
@@ -81,17 +86,11 @@ public class Faner extends javax.swing.JPanel {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 880, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(jTabbedPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1009, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 496, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 600, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
 

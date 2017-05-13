@@ -28,19 +28,6 @@ public class MusikTjeneste{
         Faner faner = new Faner();
         ImageIcon icon = new ImageIcon("NodeIcon.png");
         
-        KeyListener keyListener = new KeyListener() {
-      public void keyPressed(KeyEvent keyEvent) {
-          System.out.println("Pressed");
-      }
-
-      public void keyReleased(KeyEvent keyEvent) {
-
-      }
-
-      public void keyTyped(KeyEvent keyEvent) {
-
-      }  
-    };
         vindue.add(faner);
         vindue.setIconImage(icon.getImage());
         vindue.pack();

@@ -84,7 +84,6 @@ public class GUI extends javax.swing.JPanel{
 
         setBackground(new java.awt.Color(0, 0, 0));
 
-        jTable1.setAutoCreateRowSorter(true);
         jTable1.setBackground(new java.awt.Color(0, 0, 0));
         jTable1.setForeground(new java.awt.Color(204, 204, 204));
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
@@ -104,14 +103,15 @@ public class GUI extends javax.swing.JPanel{
             }
         });
         jTable1.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_LAST_COLUMN);
-        jTable1.setFillsViewportHeight(true);
         jTable1.setGridColor(new java.awt.Color(0, 0, 0));
+        jTable1.setOpaque(false);
         jTable1.setRowHeight(35);
-        jTable1.setRowMargin(-10);
+        jTable1.setRowMargin(0);
         jTable1.setSelectionBackground(new java.awt.Color(51, 51, 51));
         jTable1.setSelectionForeground(new java.awt.Color(204, 204, 204));
         jTable1.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jTable1.getTableHeader().setReorderingAllowed(false);
+        jTable1.setUpdateSelectionOnSort(false);
         jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jTable1MouseClicked(evt);
